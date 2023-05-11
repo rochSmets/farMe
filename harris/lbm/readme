@@ -1,0 +1,7 @@
+lbm   : ma branche load balancer
+lbm-r : fork de lbm avec rebalance_coarsest=true dans src/amr/wrappers/integrator.hpp
+
+
+run01 : harris@lbm   w/o tagging on L0
+run02 : harris@lbm   w/o tagging on L0-L1
+run03 : harris@lbm-r w/o tagging on L0

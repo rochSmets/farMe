@@ -1,0 +1,5 @@
+
+wei_01a : run de ref sur la branche master a L0
+wei_02a : id wei_01a sur la branche lbmi, tag sur 3 niveaux
+wei_03a : id wei_02a avec lb_val=1
+
