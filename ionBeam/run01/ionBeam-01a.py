@@ -124,13 +124,13 @@ def config():
     for pop in poplist:
         for quantity in ["density", "flux"]:
             FluidDiagnostics(quantity=quantity,
-                             write_timestamps=timestamps_fields,
+                             write_timestamps=timestamps_fine,
                              compute_timestamps=timestamps_fine,
                              population_name=pop)
 
         for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
             ParticleDiagnostics(quantity=quantity,
-                                compute_timestamps=timestamps_particles,
+                                compute_timestamps=timestamps_coarse,
                                 write_timestamps=timestamps_coarse,
                                 population_name=pop)
 
