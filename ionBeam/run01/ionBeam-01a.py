@@ -25,20 +25,19 @@ mpl.use('Agg')
 def config():
 
     Simulation(
-        time_step = 0.0005,
+        time_step = 0.001,
         final_time = 60.,
         boundary_types = ("periodic", "periodic"),
-        cells = (1000,200),
-        dl = (1.,1.),
-        refinement_boxes = None,
-        interp_order = 1,
+        cells = (1000, 200),
+        dl = (1., 1.),
+        refinement_boxes = {},
         resistivity = 0.001,
         hyper_resistivity = 0.001,
         diag_options = {"format" : "phareh5",
-                        "options" : {"dir" : "01c", "mode" : "overwrite"}},
+                        "options" : {"dir" : "01a", "mode" : "overwrite"}},
         restart_options={"dir" : "checks", "mode" : "overwrite",
-                         "timestamps" : [50., 60.],
-                         "restart_time" : 40.},
+                         "timestamps" : [10., 20., 30., 40., 50., 60.]},
+                        #"restart_time":80.
     )
 
     def densityMain(x, y):
@@ -100,26 +99,25 @@ def config():
 
     sim = ph.global_vars.sim
 
-    dt_ = 200.*sim.time_step
-    nt_ = (sim.final_time)/dt_+1
-    timestamps_fields = dt_*np.arange(nt_)
+    dt = 100.*sim.time_step
+    nt = (sim.final_time)/dt+1
+    timestamps_fine = dt * np.arange(nt)
 
-    dt_ = 2000.*sim.time_step
-    nt_ = (sim.final_time)/dt_+1
-    timestamps_particles = dt_*np.arange(nt_)
-
+    dt = 1000.*sim.time_step
+    nt = (sim.final_time)/dt+1
+    timestamps_coarse = dt * np.arange(nt)
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
             quantity=quantity,
-            write_timestamps=timestamps_fields,
-            compute_timestamps=timestamps_fields,
+            write_timestamps=timestamps_fine,
+            compute_timestamps=timestamps_fine,
         )
     for quantity in ["density", "bulkVelocity"]:
              FluidDiagnostics(
                  quantity=quantity,
-                 write_timestamps=timestamps_fields,
-                 compute_timestamps=timestamps_fields
+                 write_timestamps=timestamps_fine,
+                 compute_timestamps=timestamps_fine
              )
 
     poplist = ["main", "beam"]
@@ -127,13 +125,13 @@ def config():
         for quantity in ["density", "flux"]:
             FluidDiagnostics(quantity=quantity,
                              write_timestamps=timestamps_fields,
-                             compute_timestamps=timestamps_fields,
+                             compute_timestamps=timestamps_fine,
                              population_name=pop)
 
         for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
             ParticleDiagnostics(quantity=quantity,
                                 compute_timestamps=timestamps_particles,
-                                write_timestamps=timestamps_particles,
+                                write_timestamps=timestamps_coarse,
                                 population_name=pop)
 
 
@@ -141,8 +139,6 @@ def config():
 
 
 def main():
-    #from pybindlibs.cpp import mpi_rank
-    #from matplotlib import rc
 
     config()
     sim = Simulator(gv.sim)

@@ -1,7 +1,5 @@
 
-run01 : run de reference avec donnees de alexis
-        tourne en 24h sur cholesky [40 noeuds] pour t=20
-        datas dans 01a... 01e avec 4 restarts tout les t=20
+run01 : run avec init alexis
 
-run02 : idem run01 sans vitesse de derive... ie plasma thermique !
+run02 : =run01 avec interp_order=2
 
