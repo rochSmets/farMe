@@ -102,12 +102,12 @@ def config():
     sim = ph.global_vars.sim
 
     dt = 100.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps_fine = dt * np.arange(nt)
+    nt = (sim.final_time-sim.restart_time)/dt+1
+    timestamps_fine = sim.restart_time+dt*np.arange(nt)
 
     dt = 1000.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps_coarse = dt * np.arange(nt)
+    nt = (sim.final_time-sim.restart_time)/dt+1
+    timestamps_coarse = sim.restart_time+dt*np.arange(nt)
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
