@@ -1,15 +1,15 @@
 #!/bin/bash
 
 ## ___ sbatch directives
-#SBATCH --job-name=r01a
+#SBATCH --job-name=ionBeam-02a
 #SBATCH --output=%x-%j.log
 #
 #SBATCH --ntasks=40
 #SBATCH --time=24:00:00
 #SBATCH --partition=cpu_shared
 #SBATCH --account=phare
-##SBATCH --mail-type=ALL
-##SBATCH --mail-user=roch.smets@polytechnique.edu
+#SBATCH --mail-type=ALL
+#SBATCH --mail-user=roch.smets@lpp.polytechnique.fr
 
 ## ___ load modules
 module load cmake/3.19.7
@@ -25,5 +25,5 @@ conda activate phare
 export PYTHONPATH=/mnt/beegfs/workdir/roch.smets/build-release:/mnt/beegfs/home/LPP/roch.smets/codes/far/PHARE/pyphare
 
 ## ___ run phare with python
-mpirun -n $SLURM_NTASKS python r02a.py
+mpirun -n $SLURM_NTASKS python ionBeam-02a.py
 
