@@ -26,7 +26,7 @@ def config():
 
     Simulation(
         time_step = 0.001,
-        final_time = 60.,
+        final_time = 80.,
         boundary_types = ("periodic", "periodic"),
         cells = (1000, 200),
         dl = (1., 1.),
@@ -36,7 +36,7 @@ def config():
         diag_options = {"format" : "phareh5",
                         "options" : {"dir" : "02a", "mode" : "overwrite"}},
         restart_options={"dir" : "checks", "mode" : "overwrite",
-                         "timestamps" : [10., 20., 30., 40., 50., 60.]},
+                         "timestamps" : [10., 20., 30., 40., 50., 60., 70., 80.]},
                         #"restart_time":80.
         interp_order = 2,
     )
