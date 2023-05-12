@@ -1,4 +1,5 @@
 
-run01 (r) : @160c, init alexis, t=60
-run02 (p) : =run01@160c, interp_order=2
+run01a (f) : @160c, init alexis, t=60
+run01b (p) : restart=run01a @ t=30
+run02a (r) : =run01@160c, interp_order=2
 
