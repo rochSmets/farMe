@@ -34,10 +34,12 @@ def config():
         resistivity = 0.001,
         hyper_resistivity = 0.001,
         diag_options = {"format" : "phareh5",
-                        "options" : {"dir" : "01b", "mode" : "overwrite"}},
-        restart_options={"dir" : "checks", "mode" : "overwrite",
-                         "timestamps" : [40., 50., 60., 70., 80.]},
-                         "restart_time":30.
+                        "options" : {"dir" : "01b",
+                                     "mode" : "overwrite"}},
+        restart_options={"dir" : "checks",
+                         "mode" : "overwrite",
+                         "timestamps" : [40., 50., 60., 70., 80.],
+                         "restart_time":30.},
     )
 
     def densityMain(x, y):
