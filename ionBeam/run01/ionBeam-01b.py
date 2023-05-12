@@ -100,14 +100,15 @@ def config():
     ElectronModel(closure="isothermal", Te=1.0)
 
     sim = ph.global_vars.sim
+    start_time = sim.start_time()
 
     dt = 100.*sim.time_step
-    nt = (sim.final_time-sim.restart_time)/dt+1
-    timestamps_fine = sim.restart_time+dt*np.arange(nt)
+    nt = (sim.final_time-start_time)/dt+1
+    timestamps_fine = start_time+dt*np.arange(nt)
 
     dt = 1000.*sim.time_step
-    nt = (sim.final_time-sim.restart_time)/dt+1
-    timestamps_coarse = sim.restart_time+dt*np.arange(nt)
+    nt = (sim.final_time-start_time)/dt+1
+    timestamps_coarse = start_time+dt*np.arange(nt)
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
