@@ -1,5 +1,4 @@
 
-run01 : run avec init alexis
-
-run02 : =run01 avec interp_order=2
+run01 (r) : @160c, init alexis, t=60
+run02 (p) : =run01@160c, interp_order=2
 
