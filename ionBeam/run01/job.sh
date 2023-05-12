@@ -1,7 +1,7 @@
 #!/bin/bash
 
 ## ___ sbatch directives
-#SBATCH --job-name=ionBeam-01a
+#SBATCH --job-name=ionBeam-01b
 #SBATCH --output=%x-%j.log
 #
 #SBATCH --ntasks=160
@@ -25,5 +25,5 @@ conda activate phare
 export PYTHONPATH=/mnt/beegfs/workdir/roch.smets/build-release:/mnt/beegfs/home/LPP/roch.smets/codes/far/PHARE/pyphare
 
 ## ___ run phare with python
-mpirun -n $SLURM_NTASKS python ionBeam-01a.py
+mpirun -n $SLURM_NTASKS python ionBeam-01b.py
 
