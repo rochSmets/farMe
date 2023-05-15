@@ -34,12 +34,12 @@ def config():
         resistivity = 0.001,
         hyper_resistivity = 0.001,
         diag_options = {"format" : "phareh5",
-                        "options" : {"dir" : "02a",
+                        "options" : {"dir" : "01b",
                                      "mode" : "overwrite"}},
         restart_options={"dir" : "checks",
                          "mode" : "overwrite",
-                         "timestamps" : [10., 20., 30., 40., 50., 60., 70., 80.]},
-                        #"restart_time":80.
+                         "timestamps" : [40., 50., 60., 70., 80.],
+                         "restart_time":30.},
         interp_order = 2,
     )
 
@@ -98,17 +98,18 @@ def config():
               "init": {"seed": 12}},
     )
 
-    ElectronModel(closure = "isothermal", Te = 1.0)
+    ElectronModel(closure="isothermal", Te=1.0)
 
     sim = ph.global_vars.sim
+    start_time = sim.start_time()
 
     dt = 100.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps_fine = dt * np.arange(nt)
+    nt = (sim.final_time-start_time)/dt+1
+    timestamps_fine = start_time+dt*np.arange(nt)
 
     dt = 1000.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps_coarse = dt * np.arange(nt)
+    nt = (sim.final_time-start_time)/dt+1
+    timestamps_coarse = start_time+dt*np.arange(nt)
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
