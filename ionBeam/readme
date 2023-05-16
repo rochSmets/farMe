@@ -1,5 +1,11 @@
 
-run01a (f) : @160c, init alexis, t=60
-run01b (p) : restart=run01a @ t=30
-run02a (r) : =run01@160c, interp_order=2
+run01a (f) : @160c, init alexis, t=60 (fail @ t=57)
+run02a (f) : =run01@160c, interp_order=2 (wall @ t=32)
+run02b (f) : restart 02a (fail @ t=49)
+run03a (t) : @160c, init yao
+
+t : to be prepared
+r : ready to run
+f : finished
+5 : r5-ed on kaa
 
