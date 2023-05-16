@@ -6,7 +6,7 @@
 #
 #SBATCH --ntasks=160
 #SBATCH --time=12:00:00
-#SBATCH --partition=cpu_shared
+#SBATCH --partition=cpu_dist
 #SBATCH --account=phare
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=roch.smets@lpp.polytechnique.fr
