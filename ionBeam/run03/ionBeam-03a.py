@@ -50,7 +50,7 @@ def config():
         return 1.0
 
     def densityBeam(x, y):
-        return np.piecewise(x, [x < x_1, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:1.0, lambda x:0.0])
+        return np.piecewise(x, [x < x1_, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:1.0, lambda x:0.0])
 
     def bx(x, y):
         return 1.
@@ -62,7 +62,7 @@ def config():
         return 0.
 
     def vB(x, y):
-        return np.piecewise(x, [x < x_1, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:3.0, lambda x:0.0])
+        return np.piecewise(x, [x < x1_, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:3.0, lambda x:0.0])
 
     def v0(x, y):
         return 0.
