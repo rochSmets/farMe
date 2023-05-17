@@ -5,7 +5,8 @@ run02b (f) : restart 02a (fail @ t=49)
 run03a (t) : @160c, init yao
 
 t : to be prepared
-r : ready to run
+y : ready to run
+r : running
 f : finished
 5 : r5-ed on kaa
 
