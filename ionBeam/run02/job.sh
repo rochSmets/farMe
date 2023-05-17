@@ -27,3 +27,4 @@ export PYTHONPATH=/mnt/beegfs/workdir/roch.smets/build-release:/mnt/beegfs/home/
 ## ___ run phare with python
 mpirun -n $SLURM_NTASKS python ionBeam-02b.py
 
+
