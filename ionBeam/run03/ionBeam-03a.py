@@ -24,14 +24,14 @@ mpl.use('Agg')
 
 def config():
 
-    x1_ = 20.0
-    x2_ = 120.0
+    x1_ = 2.0
+    x2_ = 22.0
 
     Simulation(
         time_step = 0.001,
         final_time = 10.,
         boundary_types = ("periodic", "periodic"),
-        cells = (1000, 400),
+        cells = (300, 100),
         dl = (0.2, 0.2),
         refinement_boxes = {},
         resistivity = 0.001,
@@ -50,16 +50,16 @@ def config():
         return 1.0
 
     def densityBeam(x, y):
-        return np.piecewise(x, [x < x1_, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:1.0, lambda x:0.0])
+        return np.piecewise(x, [x < x1_, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:2.0, lambda x:0.0])
 
     def bx(x, y):
-        return 1.
+        return 0.
 
     def by(x, y):
         return 0.
 
     def bz(x, y):
-        return 0.
+        return 1.
 
     def vB(x, y):
         return np.piecewise(x, [x < x1_, ((x1_ < x) & (x < x2_)), x > x2_], [lambda x:0.0, lambda x:3.0, lambda x:0.0])
@@ -68,10 +68,10 @@ def config():
         return 0.
 
     def vthMain(x, y):
-        return np.sqrt(1.0)
+        return np.sqrt(0.05)
 
     def vthBeam(x, y):
-        return np.sqrt(1.0)
+        return np.sqrt(0.01)
 
     MaxwellianFluidModel(
         bx=bx,
@@ -101,7 +101,7 @@ def config():
               "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="isothermal", Te=1.0)
+    ElectronModel(closure="isothermal", Te=0.02)
 
     sim = ph.global_vars.sim
     start_time = sim.start_time()
