@@ -34,6 +34,7 @@ def config():
         cells = (300, 100),
         dl = (0.2, 0.2),
         refinement_boxes = {},
+        tag_buffer="10",
         resistivity = 0.001,
         hyper_resistivity = 0.001,
         diag_options = {"format" : "phareh5",
