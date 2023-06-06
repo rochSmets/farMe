@@ -19,9 +19,9 @@ def config():
     L=0.5
     Simulation(
         time_step=0.005,
-        final_time=80.,
-        cells=(800,400),
-        dl=(0.40, 0.40),
+        final_time=20.,
+        cells=(400, 100),
+        dl=(0.4, 0.4),
         #refinement="tagging",
         refinement_boxes = {},
         #loadbalancing="nppc",
@@ -122,24 +122,24 @@ def config():
         protons={"charge": 1,
                  "mass": 1.,
                  "density": density,
-                 "vbulkx":v0,
-                 "vbulky":v0,
-                 "vbulkz":v0,
-                 "vthx":vth,
-                 "vthy":vth,
-                 "vthz":vth,
+                 "vbulkx": v0,
+                 "vbulky": v0,
+                 "vbulkz": v0,
+                 "vthx": vth,
+                 "vthy": vth,
+                 "vthz": vth,
                  "nbr_part_per_cell": 500,
                  "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="isothermal", Te=0.0)
+    ElectronModel(closure="isothermal", Te = 0.0)
 
 
 
     sim = ph.global_vars.sim
     dt = 100.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps = dt * np.arange(nt)
+    nt = (sim.final_time)/dt
+    timestamps = dt * np.arange(nt+1)
 
 
 
@@ -166,11 +166,11 @@ def config():
                          population_name="protons")
 
 
-    #for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
-    #    ParticleDiagnostics(quantity=quantity,
-    #                        compute_timestamps=timestamps,
-    #                        write_timestamps=timestamps,
-    #                        population_name="protons")
+    for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
+        ParticleDiagnostics(quantity=quantity,
+                            compute_timestamps=timestamps,
+                            write_timestamps=timestamps,
+                            population_name="protons")
 
 
 

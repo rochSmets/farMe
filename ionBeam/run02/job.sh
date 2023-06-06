@@ -25,6 +25,4 @@ conda activate phare
 export PYTHONPATH=/mnt/beegfs/workdir/roch.smets/build-release:/mnt/beegfs/home/LPP/roch.smets/codes/far/PHARE/pyphare
 
 ## ___ run phare with python
-mpirun -n $SLURM_NTASKS python ionBeam-02b.py
-
-
+mpirun -n $SLURM_NTASKS python ionBeam-02a.py
