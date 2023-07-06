@@ -4,9 +4,9 @@
 #SBATCH --job-name=harris-01a
 #SBATCH --output=%x-%j.log
 #
-#SBATCH --ntasks=80
+#SBATCH --ntasks=20
 #SBATCH --time=24:00:00
-#SBATCH --partition=cpu_dist
+#SBATCH --partition=cpu_shared
 #SBATCH --account=phare
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=roch.smets@lpp.polytechnique.fr

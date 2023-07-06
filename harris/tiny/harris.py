@@ -21,24 +21,24 @@ def config():
         time_step=0.005,
         final_time=20.,
         cells=(400, 100),
-        dl=(0.40, 0.40),
-        loadbalancing="nppc",
-        refinement_boxes={},
+        dl=(0.4, 0.4),
         #refinement="tagging",
-        #max_nbr_levels=2,
-        nesting_buffer=1,
-        clustering="tile",
-        tag_buffer="10",
+        refinement_boxes = {},
+        #loadbalancing="nppc",
+        #max_nbr_levels=3,
+        #nesting_buffer=1,
+        #clustering="tile",
+        #tag_buffer="10",
         hyper_resistivity=0.002,
         resistivity=0.001,
         diag_options={"format": "phareh5",
-                      "options": {"dir": "01a",
+                      "options": {"dir": ".",
                                   "mode":"overwrite"}
                      },
-        # restart_options={"dir":"checks", "mode":"overwrite",
-        #                  "timestamps":[20., ],
-        #                  #"restart_time":80.
-        #                 },
+        restart_options={"dir":"checks", "mode":"overwrite",
+                         "timestamps":[10., 20.],
+                         #"restart_time":80.
+                        }
     )
 
     x0_ = 0.5
@@ -122,59 +122,54 @@ def config():
         protons={"charge": 1,
                  "mass": 1.,
                  "density": density,
-                 "vbulkx":v0,
-                 "vbulky":v0,
-                 "vbulkz":v0,
-                 "vthx":vth,
-                 "vthy":vth,
-                 "vthz":vth,
+                 "vbulkx": v0,
+                 "vbulky": v0,
+                 "vbulkz": v0,
+                 "vthx": vth,
+                 "vthy": vth,
+                 "vthz": vth,
                  "nbr_part_per_cell": 500,
                  "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="isothermal", Te=0.0)
+    ElectronModel(closure="isothermal", Te = 0.0)
 
 
 
     sim = ph.global_vars.sim
-
-    dt = 200.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps_fine = dt * np.arange(nt)
-
-    dt = 2000.*sim.time_step
-    nt = (sim.final_time)/dt+1
-    timestamps_coarse = dt * np.arange(nt)
+    dt = 100.*sim.time_step
+    nt = (sim.final_time)/dt
+    timestamps = dt * np.arange(nt+1)
 
 
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
             quantity=quantity,
-            write_timestamps=timestamps_fine,
-            compute_timestamps=timestamps_fine,
+            write_timestamps=timestamps,
+            compute_timestamps=timestamps,
         )
 
 
     for quantity in ["density", "bulkVelocity"]:
         FluidDiagnostics(
             quantity=quantity,
-            write_timestamps=timestamps_fine,
-            compute_timestamps=timestamps_fine,
+            write_timestamps=timestamps,
+            compute_timestamps=timestamps,
             )
 
 
     for quantity in ["density", "flux"]:
         FluidDiagnostics(quantity=quantity,
-                         write_timestamps=timestamps_fine,
-                         compute_timestamps=timestamps_fine,
+                         write_timestamps=timestamps,
+                         compute_timestamps=timestamps,
                          population_name="protons")
 
 
     for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
         ParticleDiagnostics(quantity=quantity,
-                            compute_timestamps=timestamps_coarse,
-                            write_timestamps=timestamps_coarse,
+                            compute_timestamps=timestamps,
+                            write_timestamps=timestamps,
                             population_name="protons")
 
 

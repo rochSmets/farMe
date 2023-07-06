@@ -22,23 +22,23 @@ def config():
         final_time=20.,
         cells=(400, 100),
         dl=(0.40, 0.40),
+        refinement="tagging",
         loadbalancing="nppc",
-        refinement_boxes={},
-        #refinement="tagging",
-        #max_nbr_levels=2,
+        #refinement_boxes=None,
+        max_nbr_levels=2,
         nesting_buffer=1,
         clustering="tile",
         tag_buffer="10",
         hyper_resistivity=0.002,
         resistivity=0.001,
         diag_options={"format": "phareh5",
-                      "options": {"dir": "01a",
+                      "options": {"dir": "02a",
                                   "mode":"overwrite"}
                      },
         # restart_options={"dir":"checks", "mode":"overwrite",
-        #                  "timestamps":[20., ],
+        #                  "timestamps":[20.,],
         #                  #"restart_time":80.
-        #                 },
+        #                 }
     )
 
     x0_ = 0.5
