@@ -19,8 +19,8 @@ def config():
     L=0.5
     Simulation(
         time_step=0.005,
-        final_time=80.,
-        cells=(800, 400),
+        final_time=20.,
+        cells=(400, 100),
         dl=(0.40, 0.40),
         loadbalancing="nppc",
         refinement_boxes={},
@@ -35,10 +35,10 @@ def config():
                       "options": {"dir": "03a",
                                   "mode":"overwrite"}
                      },
-        restart_options={"dir":"checks", "mode":"overwrite",
-                         "timestamps":[20., 40.,60., 80.],
-                         #"restart_time":80.
-                        }
+        # restart_options={"dir":"checks", "mode":"overwrite",
+        #                  "timestamps":[20., ],
+        #                  #"restart_time":80.
+        #                 }
     )
 
     x0_ = 0.5

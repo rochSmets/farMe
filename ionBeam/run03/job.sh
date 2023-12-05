@@ -4,7 +4,7 @@
 #SBATCH --job-name=ionBeam-03a
 #SBATCH --output=%x-%j.log
 #
-#SBATCH --ntasks=40
+#SBATCH --ntasks=12
 #SBATCH --time=12:00:00
 #SBATCH --partition=cpu_shared
 #SBATCH --account=phare

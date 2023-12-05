@@ -2,7 +2,8 @@
 run01a (f) : @160c, init alexis, t=60 (fail @ t=57)
 run02a (f) : =run01@160c, interp_order=2 (wall @ t=32)
 run02b (f) : restart 02a (fail @ t=49)
-run03a (t) : @160c, init yao
+run03a (t) : @12c, init yao
+run04a (t) : =03a avec Bx=1, Bz=0
 
 t : to be prepared
 y : ready to run
