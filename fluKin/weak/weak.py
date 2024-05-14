@@ -109,6 +109,12 @@ def config(**kwargs):
             compute_timestamps=timestamps,
             )
 
+    for popname in ("protons", ):
+             for name in ["domain", ]:
+                 ParticleDiagnostics(quantity=name,
+                                     compute_timestamps=timestamps,
+                                     write_timestamps=timestamps,
+                                     population_name=popname)
 
 def main():
     from pyphare.cpp import cpp_lib
