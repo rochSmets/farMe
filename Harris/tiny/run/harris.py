@@ -22,22 +22,22 @@ def config():
         final_time=20.,
         cells=(400, 100),
         dl=(0.4, 0.4),
-        #refinement="tagging",
-        refinement_boxes = {},
-        #loadbalancing="nppc",
-        #max_nbr_levels=3,
-        #nesting_buffer=1,
-        #clustering="tile",
-        #tag_buffer="10",
+        # refinement="tagging",
+        refinement_boxes={},
+        # loadbalancing="nppc",
+        # max_nbr_levels=3,
+        # nesting_buffer=1,
+        # clustering="tile",
+        # tag_buffer="10",
         hyper_resistivity=0.002,
         resistivity=0.001,
         diag_options={"format": "phareh5",
                       "options": {"dir": ".",
-                                  "mode":"overwrite"}
+                                  "mode": "overwrite"}
                      },
-        restart_options={"dir":"checks", "mode":"overwrite",
-                         "timestamps":[10., 20.],
-                         #"restart_time":80.
+        restart_options={"dir": "checks", "mode": "overwrite",
+                         "timestamps": [10., 20.],
+                         # "restart_time":80.
                         }
     )
 
@@ -50,10 +50,8 @@ def config():
         Ly = sim.simulation_domain()[1]
         return 0.4 + 1./np.cosh((y-Ly*y1_)/L)**2 + 1./np.cosh((y-Ly*y2_)/L)**2
 
-
     def S(y, y0, l):
         return 0.5*(1. + np.tanh((y-y0)/l))
-
 
     def by(x, y):
         from pyphare.pharein.global_vars import sim
@@ -66,11 +64,10 @@ def config():
         y1 = (y - y1_ * Ly)
         y2 = (y - y2_ * Ly)
 
-        dBy1 =  2*dB*x0 * np.exp(-(x0**2 + y1**2)/(sigma)**2)
-        dBy2 = -2*dB*x0 * np.exp(-(x0**2 + y2**2)/(sigma)**2)
+        dBy1 = 2*dB*x0*np.exp(-(x0**2+y1**2)/(sigma)**2)
+        dBy2 = -2*dB*x0*np.exp(-(x0**2+y2**2)/(sigma)**2)
 
         return dBy1 + dBy2
-
 
     def bx(x, y):
         from pyphare.pharein.global_vars import sim
@@ -84,25 +81,23 @@ def config():
         y2 = (y - y2_ * Ly)
 
         dBx1 = -2*dB*y1 * np.exp(-(x0**2 + y1**2)/(sigma)**2)
-        dBx2 =  2*dB*y2 * np.exp(-(x0**2 + y2**2)/(sigma)**2)
+        dBx2 = 2*dB*y2 * np.exp(-(x0**2 + y2**2)/(sigma)**2)
 
-        v1=-1
-        v2=1.
-        return v1 + (v2-v1)*(S(y,Ly*y1_,L) -S(y, Ly*y2_,L)) + dBx1 + dBx2
-
+        v1 = -1
+        v2 = 1
+        return v1 + (v2 - v1) * (S(y, Ly * y1_, L) - S(y, Ly * y2_, L))\
+               + dBx1 + dBx2
 
     def bz(x, y):
         return 0.
 
-
     def b2(x, y):
-        return bx(x,y)**2 + by(x, y)**2 + bz(x, y)**2
-
+        return bx(x, y)**2 + by(x, y)**2 + bz(x, y)**2
 
     def T(x, y):
         K = 0.7
         temp = 1./density(x, y)*(K - b2(x, y)*0.5)
-        assert np.all(temp >0)
+        assert np.all(temp > 0)
         return temp
 
     def v0(x, y):
@@ -110,10 +105,6 @@ def config():
 
     def vth(x, y):
         return np.sqrt(T(x, y))
-
-    def vthz(x, y):
-        return np.sqrt(T(x, y))
-
 
     MaxwellianFluidModel(
         bx=bx,
@@ -132,16 +123,12 @@ def config():
                  "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="isothermal", Te = 0.0)
-
-
+    ElectronModel(closure="isothermal", Te=0.0)
 
     sim = ph.global_vars.sim
     dt = 100.*sim.time_step
     nt = (sim.final_time)/dt
     timestamps = dt * np.arange(nt+1)
-
-
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
@@ -150,14 +137,12 @@ def config():
             compute_timestamps=timestamps,
         )
 
-
-    for quantity in ["density", "bulkVelocity"]:
+    for quantity in ["density", "mass_density", "bulkVelocity"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
             compute_timestamps=timestamps,
             )
-
 
     for quantity in ["density", "flux"]:
         FluidDiagnostics(quantity=quantity,
@@ -165,13 +150,11 @@ def config():
                          compute_timestamps=timestamps,
                          population_name="protons")
 
-
-    for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
+    for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
         ParticleDiagnostics(quantity=quantity,
                             compute_timestamps=timestamps,
                             write_timestamps=timestamps,
                             population_name="protons")
-
 
 
 def main():
@@ -182,5 +165,5 @@ def main():
     simulator.run()
 
 
-if __name__=="__main__":
+if __name__ == "__main__":
     main()
