@@ -4,11 +4,13 @@
 import pyphare.pharein as ph  # lgtm [py/import-and-import-from]
 from pyphare.pharein import Simulation
 from pyphare.pharein import MaxwellianFluidModel
-from pyphare.pharein import ElectromagDiagnostics, FluidDiagnostics, ParticleDiagnostics
+from pyphare.pharein import ElectromagDiagnostics
+from pyphare.pharein import FluidDiagnostics
+from pyphare.pharein import ParticleDiagnostics
 from pyphare.pharein import ElectronModel
 from pyphare.simulator.simulator import Simulator
 from pyphare.pharein import global_vars as gv
-from pyphare.pharesee.run import Run
+# from pyphare.pharesee.run import Run
 
 # import matplotlib.pyplot as plt
 import matplotlib as mpl
@@ -35,14 +37,14 @@ def bz(x):
 
 
 def T(x):
-    return 0.01
+    return 0.125
 
 
 def vWeak(x):
     from pyphare.pharein.global_vars import sim
     L = sim.simulation_domain()[0]
-    location = 0.5*L
-    width = 6.
+    location = L/2.0
+    width = L/16.0
     return 0.08*np.exp(-(x-location)**2/width)
 
 
@@ -70,7 +72,7 @@ def config(**kwargs):
 
     Simulation(
         time_step=0.005,
-        final_time=100.,
+        final_time=20.,
         boundary_types="periodic",
         hyper_resistivity=0.001,
         cells=512,
@@ -92,7 +94,7 @@ def config(**kwargs):
     ElectronModel(closure="isothermal", Te=0.05)
 
     sim = ph.global_vars.sim
-    dt = sim.time_step*100
+    dt = sim.time_step*200
     timestamps = np.arange(0, sim.final_time+dt, dt)
 
     for quantity in ["E", "B"]:
@@ -110,17 +112,18 @@ def config(**kwargs):
             )
 
     for popname in ("protons", ):
-             for name in ["domain", ]:
-                 ParticleDiagnostics(quantity=name,
-                                     compute_timestamps=timestamps,
-                                     write_timestamps=timestamps,
-                                     population_name=popname)
+        for name in ["domain", ]:
+            ParticleDiagnostics(quantity=name,
+                                compute_timestamps=timestamps,
+                                write_timestamps=timestamps,
+                                population_name=popname)
+
 
 def main():
-    from pyphare.cpp import cpp_lib
-    cpp = cpp_lib()
+    # from pyphare.cpp import cpp_lib
+    # cpp = cpp_lib()
 
-    config(diagdir="run1")
+    config(diagdir="wp")
     Simulator(gv.sim).run()
     gv.sim = None
 
