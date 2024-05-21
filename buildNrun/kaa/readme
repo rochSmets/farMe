@@ -1,0 +1,8 @@
+compile :
+rm <build-dir>
+source /opt/rh/gcc-toolset-11/enable  # should be in .zshrc
+gcc --version  # ==11
+module load mpi
+mpr  # cmake -DCMAKE_CXX_FLAGS="-g3 -O3 -march=native -mtune=native -DPHARE_DIAG_DOUBLES=1"  -Dasan=OFF -DCMAKE_EXPORT_COMPILE_COMMANDS=1 -DwithCaliper=OFF -DtestMPI=OFF -DdevMode=OFF -Dphare_configurator=OFF  ../PHARE
+make -j
+epr
