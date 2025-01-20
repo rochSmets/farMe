@@ -106,6 +106,11 @@ def vth(x, y):
     return 1.
 
 
+def Te(x, y):
+    return 0.2
+
+
+
 def config():
     Simulation(
         time_step=0.004,
@@ -139,7 +144,7 @@ def config():
                  "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="isothermal", Te=0.2)
+    ElectronModel(closure="polytropic", Te=0.2, gamma=1.66)
 
     # sim = ph.global_vars.sim
     # dt = 100.*sim.time_step
