@@ -144,7 +144,7 @@ def config():
                  "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="polytropic", Te_=0.2, gamma=1.66)
+    ElectronModel(closure="polytropic", Te_=0.2, Te=Te, gamma=1.66)
 
     # sim = ph.global_vars.sim
     # dt = 100.*sim.time_step
