@@ -36,21 +36,17 @@ def profile(x):
 
 def density(x, y):
     assert x.shape == y.shape
-    # funcs = np.zeros((x.shape[0], x.shape[1], 2))
     funcs = np.zeros((x.shape[0], 2))
     for i in range(2):
         x_ = (x-ellipsisCenter[i][0])/ellipsisAxis[0]
         y_ = (y-ellipsisCenter[i][1])/ellipsisAxis[1]
         r_ = np.sqrt(x_**2+y_**2)
-        # funcs[:, :, i] = nMain*profile(r_)
         funcs[:, i] = nMain*profile(r_)
-    # return funcs.sum(axis=2)
     return nBack+funcs.sum(axis=1)
 
 
 def bx(x, y):
     assert x.shape == y.shape
-    # funcs = np.zeros((x.shape[0], x.shape[1], 2))
     funcs = np.zeros((x.shape[0], 2))
     for i in range(2):
         x_ = (x-ellipsisCenter[i][0])/ellipsisAxis[0]
@@ -62,18 +58,15 @@ def bx(x, y):
         Y_ = -x_/ellipsisAxis[0]
         R_ = np.clip(np.sqrt(X_**2+Y_**2), Epsilon, None)
 
-        # normalisation to ensiure divB == 0
+        # normalisation to ensure divB == 0
         Z_ = np.clip(ellipsisAxis[1]*R_/r_, Epsilon, None)
 
-        # funcs[:, :, i] = profile(s_)*Z_*X_/R_
         funcs[:, i] = profile(s_)*Z_*X_/R_
-    # return funcs.sum(axis=2)
     return funcs.sum(axis=1)
 
 
 def by(x, y):
     assert x.shape == y.shape
-    # funcs = np.zeros((x.shape[0], x.shape[1], 2))
     funcs = np.zeros((x.shape[0], 2))
     for i in range(2):
         x_ = (x-ellipsisCenter[i][0])/ellipsisAxis[0]
@@ -85,12 +78,10 @@ def by(x, y):
         Y_ = -x_/ellipsisAxis[0]
         R_ = np.clip(np.sqrt(X_**2+Y_**2), Epsilon, None)
 
-        # normalisation to ensiure divB == 0
+        # normalisation to ensure divB == 0
         Z_ = np.clip(ellipsisAxis[1]*R_/r_, Epsilon, None)
 
-        # funcs[:, :, i] = profile(s_)*Z_*Y_/R_
         funcs[:, i] = profile(s_)*Z_*Y_/R_
-    # return funcs.sum(axis=2)
     return funcs.sum(axis=1)
 
 
@@ -108,6 +99,9 @@ def vth(x, y):
 
 def Te(x, y):
     return 0.2
+
+def Pe(x, y):
+    return density(x, y)*Te(x, y)
 
 
 
@@ -144,7 +138,8 @@ def config():
                  "init": {"seed": 12}},
     )
 
-    ElectronModel(closure="polytropic", Te_=0.2, Te=Te, gamma=1.66)
+    # ElectronModel(closure="isothermal", Te=0.2)
+    ElectronModel(closure="polytropic", Pe=Pe, gamma=1.66)
 
     # sim = ph.global_vars.sim
     # dt = 100.*sim.time_step
