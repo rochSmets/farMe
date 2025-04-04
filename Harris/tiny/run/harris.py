@@ -134,25 +134,21 @@ def config():
         ElectromagDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
-            compute_timestamps=timestamps,
         )
 
     for quantity in ["density", "mass_density", "bulkVelocity"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
-            compute_timestamps=timestamps,
             )
 
     for quantity in ["density", "flux"]:
         FluidDiagnostics(quantity=quantity,
                          write_timestamps=timestamps,
-                         compute_timestamps=timestamps,
                          population_name="protons")
 
     for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
         ParticleDiagnostics(quantity=quantity,
-                            compute_timestamps=timestamps,
                             write_timestamps=timestamps,
                             population_name="protons")
 
