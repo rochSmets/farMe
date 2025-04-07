@@ -5,5 +5,5 @@ checks/
 restore.*
 *.pyc
 *checkpoint.ipynb*
-*/run/.phare/
-*/*/run/.phare/
+*/.phare/
+*/*/.phare/
