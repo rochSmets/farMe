@@ -7,7 +7,7 @@ from pyphare.pharein import ElectromagDiagnostics, FluidDiagnostics, ParticleDia
 from pyphare.pharein import ElectronModel
 from pyphare.simulator.simulator import Simulator
 from pyphare.pharein import global_vars as gv
-from pyphare.pharesee.hierarchy import get_times_from_h5
+# from pyphare.pharesee.hierarchy import get_times_from_h5
 from tests.diagnostic import all_timestamps
 from pyphare.pharesee.run import Run
 import os
@@ -38,7 +38,7 @@ def config():
         resistivity = 0.001,
         hyper_resistivity = 0.001,
         diag_options = {"format" : "phareh5",
-                        "options" : {"dir" : "03a",
+                        "options" : {"dir" : "yao-01a",
                                      "mode" : "overwrite"}},
         #restart_options={"dir" : "checks",
         #                 "mode" : "overwrite",
@@ -119,13 +119,11 @@ def config():
         ElectromagDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps_fine,
-            compute_timestamps=timestamps_fine,
         )
     for quantity in ["density", "bulkVelocity"]:
              FluidDiagnostics(
                  quantity=quantity,
                  write_timestamps=timestamps_fine,
-                 compute_timestamps=timestamps_fine
              )
 
     poplist = ["main", "beam"]
@@ -133,12 +131,10 @@ def config():
         for quantity in ["density", "flux"]:
             FluidDiagnostics(quantity=quantity,
                              write_timestamps=timestamps_fine,
-                             compute_timestamps=timestamps_fine,
                              population_name=pop)
 
         for quantity in ['domain']: #, 'levelGhost', 'patchGhost']:
             ParticleDiagnostics(quantity=quantity,
-                                compute_timestamps=timestamps_coarse,
                                 write_timestamps=timestamps_coarse,
                                 population_name=pop)
 
