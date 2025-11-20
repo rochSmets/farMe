@@ -17,7 +17,7 @@ import numpy as np
 mpl.use('Agg')
 
 
-from tests.diagnostic import all_timestamps
+# from tests.diagnostic import all_timestamps
 
 def density(x):
     return 1.
