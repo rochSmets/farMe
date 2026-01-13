@@ -83,23 +83,16 @@ def config(**kwargs):
     timestamps = np.arange(0,sim.final_time+dt, dt)
 
 
-    for quantity in ["E", "B"]:
+    for quantity in ["E", ]:
         ElectromagDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
         )
 
-    for quantity in ["density", "charge_density", "mass_density", "flux", "bulkVelocity", "momentum_tensor"]:
+    for quantity in ["charge_density", "bulkVelocity"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
-            )
-
-    for quantity in ["density"]:
-        FluidDiagnostics(
-            quantity=quantity,
-            write_timestamps=timestamps,
-            population_name="protons",
             )
 
     for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
