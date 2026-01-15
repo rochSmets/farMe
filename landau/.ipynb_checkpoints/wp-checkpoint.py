@@ -9,60 +9,57 @@ from pyphare.simulator.simulator import Simulator
 from pyphare.pharein import global_vars as gv
 from pyphare.pharesee.run import Run
 
-
-import matplotlib.pyplot as plt
 import matplotlib as mpl
 import numpy as np
 mpl.use('Agg')
 
-
-n1 = 0.06
-L = 40.0
-Te_default = 0.02
-Ti_default = 0.01
 
 
 def config(**kwargs):
 
     Simulation(
         time_step=0.005,
-        final_time=80.0,
+        final_time=100.,
         boundary_types="periodic",
         hyper_resistivity=0.001,
-        cells=200,
-        dl=0.2,
+        cells=512,
+        dl=0.25,
         diag_options={"format": "phareh5",
                       "options": {"dir": kwargs["diagdir"],
-                                  "mode":"overwrite"}
+                                  "mode": "overwrite"}
                      }
     )
 
     def density(x):
-        return 1.0+np.sin(2*np.pi*x/L)*n1
+        return 1.
 
     def bx(x):
-        return 1.0
+        return 1.
 
     def by(x):
-        return 0.0
+        return 0.
 
     def bz(x):
         return 0.0
 
-    def v1(x):
-        Te=kwargs.get("Te", Te_default)
-        return np.sin(2*np.pi*x/L)*n1*np.sqrt(Te)
+    def vWeak(x):
+        from pyphare.pharein.global_vars import sim
+        L = sim.simulation_domain()[0]
+        x0 = 0.5*L
+        sigma = 2.0
+        bubble = 0.08*np.exp(-(x-x0)**2/(2*sigma**2))
+        return bubble
 
-    def v0(x):
+    def vNull(x):
         return 0.
 
     def vth(x):
-        Ti=kwargs.get("Ti", Ti_default)
+        Ti=kwargs.get("Ti", 0.)
         return np.sqrt(Ti)
 
-    vvv = {"vbulkx": v1,
-           "vbulky": v0,
-           "vbulkz": v0,
+    vvv = {"vbulkx": vWeak,
+           "vbulky": vNull,
+           "vbulkz": vNull,
            "vthx": vth,
            "vthy": vth,
            "vthz": vth }
@@ -72,16 +69,15 @@ def config(**kwargs):
                          bz=bz,
                          protons={"charge": 1,
                                   "density": density,
-                                  "nbr_part_per_cell": 1000,
-                                  **vvv}
+                                  "nbr_part_per_cell": 200,
+                                   **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=kwargs.get("Te", Te_default))
+    ElectronModel(closure="isothermal", Te=kwargs.get("Te", 0.))
 
     sim = ph.global_vars.sim
-    dt = sim.time_step*400
+    dt = sim.time_step*100
     timestamps = np.arange(0,sim.final_time+dt, dt)
-
 
     for quantity in ["E", "B"]:
         ElectromagDiagnostics(
@@ -89,23 +85,18 @@ def config(**kwargs):
             write_timestamps=timestamps,
         )
 
-    for quantity in ["density", "charge_density", "mass_density", "flux", "bulkVelocity", "momentum_tensor"]:
+    for quantity in ["density", "charge_density", "bulkVelocity"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
-            )
-
-    for quantity in ["density", "flux"]:
-        FluidDiagnostics(
-            quantity=quantity,
-            write_timestamps=timestamps,
-            population_name="protons",
             )
 
     for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
         ParticleDiagnostics(quantity=quantity,
                             write_timestamps=timestamps,
                             population_name="protons")
+
+
 
 
 def main():
@@ -126,7 +117,6 @@ def main():
     gv.sim = None
 
 
-
-
 if __name__=="__main__":
     main()
+

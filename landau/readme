@@ -1,2 +1,7 @@
 ld_a : Te = 0.2  --- Ti = 0.1
-
+ld_b : Te = 0.1  --- Ti = 0.05
+ld_c : Te = 0.1  --- Ti = 0.01
+ld_d : as run_a with Tmax = 64 instead of 32
+ld_e : as run_a with Tmax = 120 instead of 32
+ld_f : as ld_d with amplitude 0.04 and not 0.1
+ld_g : as ld_d with amplitude 0.06 and Tmax=80
