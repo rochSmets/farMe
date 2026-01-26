@@ -17,7 +17,7 @@ mpl.use('Agg')
 
 
 n1 = 0.06
-L = 40.0
+L = 160.0
 Te_default = 0.02
 Ti_default = 0.01
 
@@ -26,10 +26,10 @@ def config(**kwargs):
 
     Simulation(
         time_step=0.005,
-        final_time=16.0,
+        final_time=40.0,
         boundary_types="periodic",
         hyper_resistivity=0.001,
-        cells=200,
+        cells=800,
         dl=0.2,
         diag_options={"format": "phareh5",
                       "options": {"dir": kwargs["diagdir"],
@@ -51,7 +51,10 @@ def config(**kwargs):
 
     def v1(x):
         Te=kwargs.get("Te", Te_default)
-        return np.sin(2*np.pi*x/L)*n1*np.sqrt(Te)
+        Ti=kwargs.get("Ti", Ti_default)
+        gamma_e = 1
+        gamma_i = 3
+        return np.sin(2*np.pi*x/L)*n1*np.sqrt(gamma_e*Te+gamma_i*Ti)
 
     def v0(x):
         return 0.
@@ -79,7 +82,7 @@ def config(**kwargs):
     ElectronModel(closure="isothermal", Te=kwargs.get("Te", Te_default))
 
     sim = ph.global_vars.sim
-    dt = sim.time_step*100
+    dt = sim.time_step*400
     timestamps = np.arange(0,sim.final_time+dt, dt)
 
 
