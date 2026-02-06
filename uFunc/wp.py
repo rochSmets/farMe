@@ -68,13 +68,13 @@ def config(**kwargs):
 
     Simulation(
         time_step=0.005,
-        final_time=100.,
+        final_time=10.,
         boundary_types="periodic",
         hyper_resistivity=0.001,
-        cells=512,
-        dl=0.25,
+        cells=400,
+        dl=0.2,
         diag_options={"format": "phareh5",
-                      "options": {"dir": kwargs["diagdir"],
+                      "options": {"dir": "wp",
                                   "mode": "overwrite"}
                      }
     )
@@ -85,11 +85,11 @@ def config(**kwargs):
                          bz=bz,
                          protons={"charge": 1,
                                   "density": density,
-                                  "nbr_part_per_cell": 200,
+                                  "nbr_part_per_cell": 100,
                                    **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=kwargs.get("Te", 0.))
+    ElectronModel(closure="isothermal", Te=0.0)
 
 
     sim = ph.global_vars.sim
@@ -117,22 +117,10 @@ def config(**kwargs):
 
 
 
-
 def main():
-    from pyphare.cpp import cpp_lib
-    import sys
-
-    cpp = cpp_lib()
-
-    if len(sys.argv)>1:
-        Te = float(sys.argv[1])
-    else:
-        Te = 0.
-    diagdir = f"wp_{Te}"
-    config(diagdir=diagdir, Te=Te)
+    config()
     Simulator(gv.sim).run()
     gv.sim = None
-
 
 
 
