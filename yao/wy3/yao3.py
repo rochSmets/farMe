@@ -156,7 +156,7 @@ def config():
         resistivity = 0.001,
         hyper_resistivity = 0.001,
         diag_options = {"format" : "phareh5",
-                        "options" : {"dir" : ".",
+                        "options" : {"dir" : "w3a",
                                      "mode" : "overwrite"}},
         #restart_options={"dir" : "checks",
         #                 "mode" : "overwrite",
