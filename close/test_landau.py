@@ -19,30 +19,30 @@ mpl.use('Agg')
 
 def config():
 
-    Ti = 0.02
-    Te = 0.1
+    Ti = 0.1
+    Te = 0.2
     n1 = 0.06
-    L = 160.0
+    L = 40.0
     gamma_e = 1
     gamma_i = 3
-
     cs = np.sqrt(gamma_e*Te+gamma_i*Ti)
+    k = 2*np.pi/L
 
     Simulation(
         time_step=0.005,
-        final_time=40.0,
+        final_time=80.0,
         boundary_types="periodic",
         hyper_resistivity=0.001,
-        cells=800,
+        cells=200,
         dl=0.2,
         diag_options={"format": "phareh5",
-                      "options": {"dir": "test_iaw",
+                      "options": {"dir": "test_landau",
                                   "mode":"overwrite"}
                      }
     )
 
     def density(x):
-        return 1.0+np.sin(2*np.pi*x/L)*n1
+        return 1.0+n1*np.sin(k*x)
 
     def bx(x):
         return 1.0
@@ -54,7 +54,7 @@ def config():
         return 0.0
 
     def v1(x):
-        return np.sin(2*np.pi*x/L)*n1*np.sqrt(gamma_e*Te+gamma_i*Ti)
+        return n1*cs*np.sin(k*x)
 
     def v0(x):
         return 0.
@@ -111,19 +111,17 @@ def config():
     #                         population_name="protons")
 
 
-def sine_func(x, A, B, C):
-    return A * np.sin(k * x + B) + C
-
-
 def main():
     # from pyphare.cpp import cpp_lib
     # import sys
 
     # cpp = cpp_lib()
 
+
     config()
     Simulator(gv.sim).run()
     gv.sim = None
+
 
 
 
