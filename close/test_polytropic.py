@@ -37,7 +37,7 @@ def config():
         cells=200,
         dl=0.2,
         diag_options={"format": "phareh5",
-                      "options": {"dir": "test_iaw",
+                      "options": {"dir": "test_polytropic",
                                   "mode":"overwrite"}
                      }
     )
