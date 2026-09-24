@@ -8,7 +8,6 @@ from pyphare.pharein import ElectronModel
 from pyphare.simulator.simulator import Simulator
 from pyphare.pharein import global_vars as gv
 from pyphare.pharesee.run import Run
-# from pyphare.simulator.simulator import startMPI
 
 
 import matplotlib.pyplot as plt
@@ -17,33 +16,29 @@ import numpy as np
 mpl.use('Agg')
 
 
+n1 = 0.06
+L = 40.0
+Te_default = 0.02
+Ti_default = 0.01
 
-def config():
 
-    Ti = 0.01
-    Te = 0.1
-    n1 = 0.06
-    L = 40.0
-    gamma_e = 3
-    gamma_i = 3
-
-    cs = np.sqrt(gamma_e*Te+gamma_i*Ti)
+def config(**kwargs):
 
     Simulation(
         time_step=0.005,
-        final_time=30.0,
+        final_time=80.0,
         boundary_types="periodic",
         hyper_resistivity=0.001,
         cells=200,
         dl=0.2,
         diag_options={"format": "phareh5",
-                      "options": {"dir": "test_polytropic",
+                      "options": {"dir": kwargs["diagdir"],
                                   "mode":"overwrite"}
                      }
     )
 
     def density(x):
-        return 1.0+np.cos(2*np.pi*x/L)*n1
+        return 1.0+np.sin(2*np.pi*x/L)*n1
 
     def bx(x):
         return 1.0
@@ -55,17 +50,15 @@ def config():
         return 0.0
 
     def v1(x):
-        return np.sin(2*np.pi*x/L)*n1*np.sqrt(gamma_e*Te+gamma_i*Ti)
+        Te=kwargs.get("Te", Te_default)
+        return np.sin(2*np.pi*x/L)*n1*np.sqrt(Te)
 
     def v0(x):
         return 0.
 
     def vth(x):
+        Ti=kwargs.get("Ti", Ti_default)
         return np.sqrt(Ti)
-
-    def Pe(x):
-        return density(x)*Te
-
 
     vvv = {"vbulkx": v1,
            "vbulky": v0,
@@ -83,55 +76,55 @@ def config():
                                   **vvv}
                         )
 
-    # ElectronModel(closure="isothermal", Te=Te)
-    ElectronModel(closure="polytropic", Pe=Pe, gamma=gamma_e)
+    ElectronModel(closure="isothermal", Te=kwargs.get("Te", Te_default))
 
     sim = ph.global_vars.sim
     dt = sim.time_step*400
     timestamps = np.arange(0,sim.final_time+dt, dt)
 
 
-    # for quantity in ["E", "B"]:
-    #     ElectromagDiagnostics(
-    #         quantity=quantity,
-    #         write_timestamps=timestamps,
-    #     )
+    for quantity in ["E", "B"]:
+        ElectromagDiagnostics(
+            quantity=quantity,
+            write_timestamps=timestamps,
+        )
 
-    # for quantity in ["density", "charge_density", "mass_density", "flux", "bulkVelocity", "momentum_tensor"]:
-    for quantity in ["charge_density", "bulkVelocity"]:
+    for quantity in ["density", "charge_density", "mass_density", "flux", "bulkVelocity", "momentum_tensor"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
             )
 
-    # for quantity in ["density", "flux"]:
-    #     FluidDiagnostics(
-    #         quantity=quantity,
-    #         write_timestamps=timestamps,
-    #         population_name="protons",
-    #         )
+    for quantity in ["density", "flux"]:
+        FluidDiagnostics(
+            quantity=quantity,
+            write_timestamps=timestamps,
+            population_name="protons",
+            )
 
-    # for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
-    #     ParticleDiagnostics(quantity=quantity,
-    #                         write_timestamps=timestamps,
-    #                         population_name="protons")
-
-
-def sine_func(x, A, B, C):
-    return A * np.sin(k * x + B) + C
+    for quantity in ['domain']:  # , 'levelGhost', 'patchGhost']:
+        ParticleDiagnostics(quantity=quantity,
+                            write_timestamps=timestamps,
+                            population_name="protons")
 
 
 def main():
-    #from pyphare.cpp import cpp_lib
-    # import sys
+    from pyphare.cpp import cpp_lib
+    import sys
 
-    # cpp = cpp_lib()
+    cpp = cpp_lib()
 
-    # startMPI()
+    if len(sys.argv)!=4:
+        print('This code needs 3 paramaters, "run_name", Te, Ti')
+    else:
+        diagdir = sys.argv[1]
+        Te = float(sys.argv[2])
+        Ti = float(sys.argv[3])
 
-    config()
+    config(diagdir=diagdir, Te=Te, Ti=Ti)
     Simulator(gv.sim).run()
-    # gv.sim = None
+    gv.sim = None
+
 
 
 
