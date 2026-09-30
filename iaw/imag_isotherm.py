@@ -18,8 +18,8 @@ mpl.use('Agg')
 
 n1 = 0.06
 L = 40.0
-Te_default = 0.02
-Ti_default = 0.01
+Te_default = 0.2
+Ti_default = 0.1
 
 
 def config(**kwargs):
@@ -89,7 +89,7 @@ def config(**kwargs):
             write_timestamps=timestamps,
         )
 
-    for quantity in ["density", "charge_density", "mass_density", "flux", "bulkVelocity", "momentum_tensor"]:
+    for quantity in ["charge_density", "mass_density", "bulkVelocity", "momentum_tensor"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
@@ -109,10 +109,10 @@ def config(**kwargs):
 
 
 def main():
-    from pyphare.cpp import cpp_lib
+    # from pyphare.cpp import cpp_lib
     import sys
 
-    cpp = cpp_lib()
+    # cpp = cpp_lib()
 
     if len(sys.argv)!=4:
         print('This code needs 3 paramaters, "run_name", Te, Ti')
