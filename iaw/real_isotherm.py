@@ -20,9 +20,15 @@ n1 = 0.06
 L = 160.0
 Te_default = 0.02
 Ti_default = 0.01
+gamma_e, gamma_i = 1, 3
 
 
 def config(**kwargs):
+
+    Te=kwargs.get("Te", Te_default)
+    Ti=kwargs.get("Ti", Ti_default)
+
+    cs = np.sqrt(gamma_e*Te+gamma_i*Ti)
 
     Simulation(
         time_step=0.005,
@@ -50,17 +56,12 @@ def config(**kwargs):
         return 0.0
 
     def v1(x):
-        Te=kwargs.get("Te", Te_default)
-        Ti=kwargs.get("Ti", Ti_default)
-        gamma_e = 1
-        gamma_i = 3
         return np.sin(2*np.pi*x/L)*n1*np.sqrt(gamma_e*Te+gamma_i*Ti)
 
     def v0(x):
         return 0.
 
     def vth(x):
-        Ti=kwargs.get("Ti", Ti_default)
         return np.sqrt(Ti)
 
     vvv = {"vbulkx": v1,
@@ -79,7 +80,7 @@ def config(**kwargs):
                                   **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=kwargs.get("Te", Te_default))
+    ElectronModel(closure="isothermal", Te=Te)
 
     sim = ph.global_vars.sim
     dt = sim.time_step*400

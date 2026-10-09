@@ -20,9 +20,15 @@ n1 = 0.06
 L = 160.0
 Te_default = 0.02
 Ti_default = 0.01
+gamma_e, gamma_i = 3, 3
 
 
 def config(**kwargs):
+
+    Te=kwargs.get("Te", Te_default)
+    Ti=kwargs.get("Ti", Ti_default)
+
+    cs = np.sqrt(gamma_e*Te+gamma_i*Ti)
 
     Simulation(
         time_step=0.005,
@@ -50,18 +56,16 @@ def config(**kwargs):
         return 0.0
 
     def v1(x):
-        Te=kwargs.get("Te", Te_default)
-        Ti=kwargs.get("Ti", Ti_default)
-        gamma_e = 1
-        gamma_i = 3
         return np.sin(2*np.pi*x/L)*n1*np.sqrt(gamma_e*Te+gamma_i*Ti)
 
     def v0(x):
         return 0.
 
     def vth(x):
-        Ti=kwargs.get("Ti", Ti_default)
         return np.sqrt(Ti)
+
+    def Pe(x):
+        return density(x)*Te
 
     vvv = {"vbulkx": v1,
            "vbulky": v0,
@@ -79,7 +83,7 @@ def config(**kwargs):
                                   **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=kwargs.get("Te", Te_default))
+    ElectronModel(closure="polytropic", Pe=Pe, gamma=gamma_e)
 
     sim = ph.global_vars.sim
     dt = sim.time_step*400
@@ -92,7 +96,7 @@ def config(**kwargs):
             write_timestamps=timestamps,
         )
 
-    for quantity in ["density", "charge_density", "mass_density", "flux", "bulkVelocity", "momentum_tensor"]:
+    for quantity in ["charge_density", "mass_density", "bulkVelocity", "momentum_tensor"]:
         FluidDiagnostics(
             quantity=quantity,
             write_timestamps=timestamps,
@@ -112,10 +116,10 @@ def config(**kwargs):
 
 
 def main():
-    from pyphare.cpp import cpp_lib
+    # from pyphare.cpp import cpp_lib
     import sys
 
-    cpp = cpp_lib()
+    # cpp = cpp_lib()
 
     if len(sys.argv)!=4:
         print('This code needs 3 paramaters, "run_name", Te, Ti')
