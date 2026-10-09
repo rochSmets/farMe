@@ -16,7 +16,7 @@ import numpy as np
 mpl.use('Agg')
 
 
-n1 = 0.01
+n1 = 0.06
 L = 40.0
 Te_default = 0.2
 Ti_default = 0.1
