@@ -1,0 +1,17 @@
+imag : (il faut garder Te>Ti)
+
+(a) run de rference : Ti=01, Te=0.2, L=40, T=80, n1=0.06
+numerical fit  : 0.0692
+analytical fit : 0.0724
+relative error : 4.4639 %
+
+(b) on diminue k pour diminue gamma et rester en MHD : L=80, et on diminue aussi n1=0.04 pour rester lineaire
+numerical fit  : 0.0326
+analytical fit : 0.0362
+relative error : 10.0059 %
+
+(c) on reprend le k de ref : L=40, et on diminue encore n1=0.02 pour rester lineaire
+numerical fit  : 0.0869
+analytical fit : 0.0724
+relative error : 20.0549 %
+

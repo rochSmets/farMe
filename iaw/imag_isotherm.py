@@ -16,13 +16,18 @@ import numpy as np
 mpl.use('Agg')
 
 
-n1 = 0.06
+n1 = 0.01
 L = 40.0
 Te_default = 0.2
 Ti_default = 0.1
-
+gamma_e, gamma_i = 1, 3
 
 def config(**kwargs):
+
+    Te=kwargs.get("Te", Te_default)
+    Ti=kwargs.get("Ti", Ti_default)
+
+    cs = np.sqrt(gamma_e*Te+gamma_i*Ti)
 
     Simulation(
         time_step=0.005,
@@ -50,14 +55,12 @@ def config(**kwargs):
         return 0.0
 
     def v1(x):
-        Te=kwargs.get("Te", Te_default)
-        return np.sin(2*np.pi*x/L)*n1*np.sqrt(Te)
+        return np.sin(2*np.pi*x/L)*n1*cs
 
     def v0(x):
         return 0.
 
     def vth(x):
-        Ti=kwargs.get("Ti", Ti_default)
         return np.sqrt(Ti)
 
     vvv = {"vbulkx": v1,
@@ -76,7 +79,7 @@ def config(**kwargs):
                                   **vvv}
                         )
 
-    ElectronModel(closure="isothermal", Te=kwargs.get("Te", Te_default))
+    ElectronModel(closure="isothermal", Te=Te)
 
     sim = ph.global_vars.sim
     dt = sim.time_step*400
