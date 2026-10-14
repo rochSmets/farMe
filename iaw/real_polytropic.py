@@ -18,8 +18,8 @@ mpl.use('Agg')
 
 n1 = 0.06
 L = 160.0
-Te_default = 0.02
-Ti_default = 0.01
+Ti_default = 0.02
+Te_default = 0.1
 gamma_e, gamma_i = 3, 3
 
 
@@ -32,7 +32,7 @@ def config(**kwargs):
 
     Simulation(
         time_step=0.005,
-        final_time=40.0,
+        final_time=20.0,
         boundary_types="periodic",
         hyper_resistivity=0.001,
         cells=800,
@@ -86,7 +86,7 @@ def config(**kwargs):
     ElectronModel(closure="polytropic", Pe=Pe, gamma=gamma_e)
 
     sim = ph.global_vars.sim
-    dt = sim.time_step*400
+    dt = sim.time_step*200
     timestamps = np.arange(0,sim.final_time+dt, dt)
 
 
